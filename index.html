@@ -283,7 +283,9 @@ dialog.claim-dlg[open]{animation:dlg .18s ease-out}
   .zoom{right:8px;bottom:8px}
   .backdrop{display:block;position:fixed;inset:0;background:rgba(20,26,22,.4);z-index:40;animation:bfade .2s ease}
   .side.open{border-color:transparent;background:none}
-  .side.open .side-in{position:fixed;inset:auto 0 0 0;max-height:85vh;border-radius:14px 14px 0 0;z-index:50;background:var(--surface);animation:sheet .25s ease-out;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .side.open .side-in{position:fixed;inset:auto 0 0 0;max-height:85vh;max-height:85dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;border-radius:14px 14px 0 0;z-index:50;background:var(--surface);animation:sheet .25s ease-out;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .side.open .grab{position:sticky;top:0;z-index:2;margin:0;padding:8px 0;height:20px;background:var(--surface);background-clip:content-box}
+  html.sheet-open,html.sheet-open body{overflow:hidden}
   .side .grab{display:block;width:36px;height:4px;border-radius:2px;background:var(--line-strong);margin:8px auto}
 }
 @keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
@@ -499,6 +501,7 @@ function renderPanel(){
   const b = st.selected, side = $('side');
   FP.forEach((p,i) => p.classList.toggle('sel', !!b && i===b.id));
   side.classList.toggle('open', !!b);
+  document.documentElement.classList.toggle('sheet-open', !!b && mobile());
   if(!b){ side.innerHTML = `<div class="side-in">${emptyState()}</div>`; return; }
   const m = STATUS[b.s];
   const stages = (b.s==='no') ? '' : `<div><p class="sec-label">Renovation progress <span class="sample">Sample dates</span></p><ol class="stages">${STAGES.map((n,i)=>{
